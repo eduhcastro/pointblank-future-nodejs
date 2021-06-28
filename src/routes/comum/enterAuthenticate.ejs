@@ -1,0 +1,14 @@
+<html>
+   <head>
+      <title>CastroMS - PBCoin</title>
+      <link rel="stylesheet" media="all" href="/css/cssAuthenticate.css"/>
+   </head>
+   <body>
+      <form class="login" method="POST" enctype="application/x-www-form-urlencoded" action="http://localhost:8080/app/authenticate">
+         <input type="hidden" name="csrf" value="<%= csrfToken %>">
+         <input type="text"   name="user" placeholder="Username">
+         <input type="password" name="password" placeholder="Password">
+         <button>Login</button>
+      </form>
+   </body>
+</html>

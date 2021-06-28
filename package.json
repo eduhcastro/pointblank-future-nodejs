@@ -1,0 +1,23 @@
+{
+  "name": "pointblank-coin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Start.js",
+  "scripts": {
+    "start": "node Start.js"
+  },
+  "author": "Castro",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.5",
+    "csurf": "^1.11.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "lru-cache": "^6.0.0",
+    "parseurl": "^1.3.3",
+    "passport-local": "^1.0.0",
+    "react": "^17.0.2"
+  }
+}
