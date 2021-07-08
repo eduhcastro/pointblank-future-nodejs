@@ -121,3 +121,12 @@ a {
   bottom: 10px;
   font-size: 12px;
 }
+
+.alert.alert-danger.new{
+  margin-top: -40px;
+  width: 402px;
+  right: 31px;
+  text-align: center;
+  background: #dadada;
+  color: #f45b69;
+}

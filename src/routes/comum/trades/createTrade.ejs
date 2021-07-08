@@ -1,0 +1,201 @@
+<head>
+  <title>PointBlank Future</title>
+  <link rel="stylesheet" href="/css/cssCenter.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
+  <script src="/vendor/jquery/jquery-3.6.0.min.js"></script>
+  <script>
+     var user = '<%= user %>'
+  </script>
+</head>
+<style>
+  .card-body {
+  overflow-y: auto;
+  }
+  .badge {
+  font-weight: 400;
+  }
+  /* NEW */
+  .card-body {
+  display: flex;
+  justify-content: space-between;
+  }
+  .text-left, .text-right {
+  margin-top: auto;
+  }
+  .text-left {
+  margin-bottom: 20px;
+  }
+</style>
+<body>
+  <header class="p-3 mb-3 border-bottom new">
+     <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+           <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+           <img src="https://www.pikpng.com/pngl/b/54-540351_point-blank-pointblank-png-clipart.png" width="50px"/>
+           </a>
+           <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+              <li><a href="#" class="nav-link px-2 link-pinkhigh">Trade</a></li>
+              <li><a href="#" class="nav-link px-2 link-secondary">Bets</a></li>
+           </ul>
+           <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+              <input type="search" name="search" class="form-control" placeholder="Search..." aria-label="Search"/>
+           </form>
+           <div class="dropdown text-end">
+              <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle"/>
+              </a>
+              <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                 <li><a class="dropdown-item" href="#">New project...</a></li>
+                 <li><a class="dropdown-item" href="#">Settings</a></li>
+                 <li><a class="dropdown-item" href="#">Profile</a></li>
+                 <li>
+                    <hr class="dropdown-divider" />
+                 </li>
+                 <li><a class="dropdown-item logout" href="#">Sign out</a></li>
+              </ul>
+           </div>
+        </div>
+     </div>
+  </header>
+  <div class="float-end d-flex justify-content-left" style="left: 50px;">
+     <div class="container container-child">
+        <div class="card">
+           <div class="card-body chat">
+              <div class="message">
+              </div>
+           </div>
+           <div class="card-footer" style="padding: 10px;">
+              <div class="input-group input-group-sm">
+                 <textarea type="text" class="form-control send" placeholder="Your message..." autofocus="" maxlength="100"></textarea>
+              </div>
+           </div>
+        </div>
+     </div>
+  </div>
+  <div class="content-items">
+     <div class="items preview">
+        <div class="grid">
+          
+           <div class="item margin-disabled">
+              <div class="modal-items-evolution add width100">
+                 <div class="title">
+                    <h3 style="color: rgb(0 2 0);">Title</h3>
+                 </div>
+                 <div class="modal-items-item" style="background: rgb(239 239 239 / 0%);">
+                  <div class="owner">
+                  <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle avatar" data-toggle="tooltip" data-bs-placement="bottom" data-html="true" title="" data-bs-original-title="<b style='color: #ffc659'>eduh123</b><br><span>Description</span>"></div>
+                  <div style="position: absolute;width: 100%;">
+                  <img src="https://www.seekpng.com/png/full/172-1729475_overwatch-boost-service-1-3000-overwatch-diamond-rank.png" class="miniature"></div>
+                    <div class="category-imgs item">
+                       <!-- <img src="/images/weapons/category/Rifle.png">
+                     <img src="/images/weapons/category/Shot.png">
+                     <img src="/images/weapons/category/Sniper.png">
+                     <img src="/images/weapons/category/Sub.png"> -->
+                 </div>
+                 </div>
+                 <!--  <div class="css-12tf9og" style="background: rgb(214 214 214);color: rgb(155, 134, 95);">
+                    <span class="css-rjdkb">
+                       <svg class="css-qc1t6j" viewBox="0 0 24 24">
+                          <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"></path>
+                       </svg>
+                       522K
+                    </span>
+                    </div>-->
+              </div>
+           </div>
+
+           <div class="col-md-10 mx-auto col-lg-5" style="    margin-left: 10%;">
+            <div class="p-4 p-md-5 border rounded-3 bg-light">
+               <div class="alert alert-warning public" role="alert" style="background-color: #f9ca04; display: none;">With the option Public session disabled, you will receive a private link, with this link, send it to a friend.
+               </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" maxlength="40" id="Title-input">
+                <label for="Title-input" style="color: #000;">Title</label>
+              </div>
+              <div class="form-floating mb-3" style="text-align: center;">
+               <span style="color: #000">Select the categories of items you are interested in.</span>
+               <div class="category-imgs">
+               <img data-category="0" src="/images/weapons/category/Rifle.png">
+               <img data-category="1" src="/images/weapons/category/Shot.png">
+               <img data-category="2" src="/images/weapons/category/Sniper.png">
+               <img data-category="3" src="/images/weapons/category/Sub.png">
+           </div>
+         </br>
+           <span style="color: #000">Describe your trade in 50 letters.</span>
+           <div class="form-floating mb-3">
+            <textarea class="form-control" id="Input-description" maxlength="50" height="60" rows="3" style="resize: none;"></textarea>
+            <label for="Input-description" style="color: #000;">Description</label>
+          </div>
+
+          <div class="form-floating mb-3" style="text-align: center;">
+            <span style="color: #000">Customize the thumbnail.</span>
+            <div class="icons-imgs">
+            <img width="50" data-thumb="1" class="selected" src="/images/icons/diamond.png">
+            <img width="50" data-thumb="2" src="/images/icons/sla.png">
+            <img width="50" data-thumb="3" src="/images/icons/star-blue.png">
+            <img width="50" data-thumb="4" src="/images/icons/star-red.png">
+            <img width="50" data-thumb="5" src="/images/icons/weapon.png">
+        </div>
+      </div>
+
+      <div class="form-floating mb-3" style="text-align: center;">
+         <span style="color: #000">Now finish customizing the background!</span>
+         <nav aria-label="...">
+            <ul class="pagination pagination-lg">
+              <a href="#" data-background="0"><li class="page-item" aria-current="page"><span class="page-link">1</span></li></a>
+              <a href="#" data-background="1"><li class="page-item"><span class="page-link">2</span></li></a>
+              <a href="#" data-background="2"><li class="page-item"><span class="page-link">3</span></li></a>
+              <a href="#" data-background="3"><li class="page-item"><span class="page-link">4</span></li></a>
+              <a href="#" data-background="4"><li class="page-item"><span class="page-link">5</span></li></a>
+              <a href="#" data-background="5"><li class="page-item"><span class="page-link">6</span></li></a>
+              <a href="#" data-background="6"><li class="page-item"><span class="page-link">7</span></li></a>
+              <a href="#" data-background="7"><li class="page-item"><span class="page-link">8</span></li></a>
+              <a href="#" data-background="8"><li class="page-item"><span class="page-link">9</span></li></a>
+            </ul>
+          </nav>
+   </div>
+
+          <div class="form-check form-switch text-muted" style="    text-align: left;">
+            <label class="form-check-label" for="Input-public-check">Public trade</label>
+            <input class="form-check-input" type="checkbox" id="Input-public-check" checked>
+          </div>
+
+              </div>
+
+              <button class="w-100 btn btn-lg btn-primary" type="submit" style="background: #fb207c; border-color: #f7f7f8;">Create</button>
+              <hr class="my-4">
+              <small class="text-muted">Your trade will not be visible to you in the trade list.</small>
+            </div>
+          </div>
+
+        </div>
+        <!-- Paginacao
+           <div class="css-1vbvbwv">
+              <a class="css-1o8a808" href="/dark?page=1">1</a>
+              <a class="css-183f0xo" href="/dark?page=2">2</a>
+              <a class="css-183f0xo" href="/dark?page=3">3</a>
+              <a class="css-183f0xo" href="/dark?page=4">4</a>
+              <a class="css-183f0xo" href="/dark?page=5">5</a>
+              <a class="css-183f0xo" href="/dark?page=42">...42</a>
+           </div>
+            -->
+     </div>
+  </div>
+  <div class="footer-evolution">
+     <div class="content">
+        <div class="credits">
+           <a href="https://github.com/jschr/vscodethemes">
+           CastroMS
+           </a>
+        </div>
+     </div>
+  </div>
+  <script
+     src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+     crossorigin="anonymous"
+     ></script>
+  <script src="/js/utils/chat.js"></script>
+  <script src="/js/trade/scripts.js"></script>
+  <script  src="/js/app.js"></script>
+</body>
