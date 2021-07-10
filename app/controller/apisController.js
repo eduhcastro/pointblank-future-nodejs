@@ -69,6 +69,9 @@ module.exports.Apis = class Apis{
 
     router.post('/chat/search', function(req,res){
       const Messages = dbjson.chat('messagesChat').get('Messages').value()
+        if(Messages.length > 20){
+          Utils.cleanChat(dbjson.chat('messagesChat').get('Messages'))
+        }
       res.json(Messages)
       res.end()
     })

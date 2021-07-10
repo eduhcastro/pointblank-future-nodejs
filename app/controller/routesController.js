@@ -61,6 +61,12 @@ module.exports = function(app, postgres, dbjson, utils) {
 
   })
 
+  app.get("/app/trade/finish", function(req,res){
+    res.status(200)
+    res.render('../src/routes/trade/finishTrade')
+    res.end()
+  })
+
   // Centro -> A Pagina raiz é a tela de trades.
   app.get("/", function(req, res) {
       var Find = typeof req.query.search !== 'undefined' ? dbjson.search.intrade(dbjson.trade('sessionTrade').get('Sessions'), req.query.search): ''

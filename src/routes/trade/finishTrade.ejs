@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<style>
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bgimg {
+  background: url("https://cdn.swap.gg/img/background.svg");
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  color: white;
+  font-family: monospace;
+  font-size: 25px;
+}
+
+.topleft {
+  position: absolute;
+  top: 0;
+  left: 16px;
+}
+
+.bottomleft {
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+}
+
+.middle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+hr {
+  margin: auto;
+  width: 40%;
+}
+</style>
+<body>
+
+<div class="bgimg">
+  <div class="topleft">
+  </div>
+  <div class="middle">
+    <h3>Exchange successfully completed!</h3>
+    <hr>
+    <p><img src="https://smartpink.com.br/site/assets/img/check.gif" width="100"></p>
+  
+    <p style="    font-size: 1rem;">You will be redirected in 3 seconds.</p>
+  </div>
+  <div class="bottomleft">
+  </div>
+</div>
+<script>
+  setTimeout(() => {
+    window.location.href = "/"
+  }, 3000);
+</script>
+</body>
+</html>

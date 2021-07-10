@@ -18,18 +18,13 @@ const Postgres =   require('./app/controller/postgreController')
 const RoutesApis = new(require('./app/controller/apisController')).Apis()
 const Utils =      require('./app/utils')
 const sharedsession = require("express-socket.io-session")
-const TradesClass = new(require('./app/class/tradeClass'))
-//const asd = DBJson.trade('sessionTrade').get('Sessions')
-//console.log(md5('teupaitamorto'))
-//console.log(asd.value())
-
 
 
 var api = RoutesApis.createApiRouter(express, Postgres, DBJson)
 var session = Sessao.module(Sessao.config)
 
 app.use(session)
-io.use(sharedsession(session));
+io.use(sharedsession(session))
 
 app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
@@ -66,19 +61,9 @@ app.use(function(req, res, next) {
     })
 })
 
-//io.use((socket, next) => {
-//
-//    console.log(socket.handshake.headers.cookie)
-//    console.log('OK')
-//    Sessao.module(Sessao.config)(socket.request, {asd: "123"}, next);
-//    // sessionMiddleware(socket.request, socket.request.res, next); will not work with websocket-only
-//    // connections, as 'socket.request.res' will be undefined in that case
-//})
-
 app.use('/app', api)
 app.use(csrf({cookie: true}))
 app.use(express.static('src/static'))
-
 
 app.use(function(err, req, res, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err)
@@ -95,16 +80,9 @@ app.use(function(err, req, res, next) {
     }
 })
 
-
-
 require('./src/App')(app, Postgres, DBJson, Utils)
 require('./src/Socket')(io, DBJson, Postgres)
 
 http.listen(8080, async function() {
-    //query.Callback("SELECT * FROM accounts WHERE login = $1::text LIMIT 1", ['thegotza1'], function(values){
-    //    console.log(values.rows)
-    //})
-    //console.log(await query.Execute("SELECT * FROM accounts LIMIT 1"))
-
     console.log('Iniciado')
 })

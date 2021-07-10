@@ -1,25 +1,3 @@
 {
-  "Sessions": [
-    {
-      "id": 1,
-      "name": "Teupai",
-      "sessionkey": "Q1zLwgn6ggFXlsQHPgZSba4xYDCSXLDJEg6W62AnbbmZO3IQnmjJkVDOUOHa2ErB",
-      "public": "true",
-      "owner": "eduh123",
-      "ownerid": 1025,
-      "participant": null,
-      "online": 0,
-      "reconnect": false,
-      "ownerdone": false,
-      "participantdone": false,
-      "personalization": {
-        "categorys": [
-          "0"
-        ],
-        "background": "5",
-        "description": "asdczx",
-        "thumbnail": "4"
-      }
-    }
-  ]
+  "Sessions": []
 }

@@ -115,7 +115,7 @@
                      <div class="owner">
                         <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle avatar" data-toggle="tooltip" data-bs-placement="bottom" data-html="true" title="" data-bs-original-title="<b style='color: #ffc659'><%= Items.owner.slice(0, -3)+'***' %></b><br><span><%= Items.personalization.description %></span>">
                      </div>
-                     <img src="<%= Tools.Front.Icons[Items.personalization.thumbnail] %>" class="item" style="filter: opacity(1);"/>
+                     <img src="<%= Tools.Front.Icons[parseInt(Items.personalization.thumbnail)-1] %>" class="item" style="filter: opacity(1);"/>
                      <div class="category-imgs item list">
                         <% 
                            for(var Categorys of Items.personalization.categorys){ 

@@ -1,11 +1,20 @@
+/**
+ *  Script PointBlank Future 2021
+ *  @author CastroMS
+ *  @description Script completo feito para o sistema de trocas de items.
+ *  @license MIT
+ * 
+ */
 class Trade {
     Web = "http://localhost:8080"
     Count = 0
     Routes = {
         GetItems:   `${getParameterByName('token')}::getItems`, // OwnerItems: `${getParameterByName('token')}::owneritems`,
-        AddItems :  `${getParameterByName('token')}::addItems`, // Adicionar items ao trade, troca.
-        ReciveItems:`${getParameterByName('token')}::reciveItems`,
-        RemoveItems:`${getParameterByName('token')}::removeItems`,
+        AddItems :  `${getParameterByName('token')}::addItems`, // Adicionar items ao trade, troca. -> Automatico
+        ReciveItems:`${getParameterByName('token')}::reciveItems`, // Recebendo items adicionado na trade -> Send&Emit
+        RemoveItems:`${getParameterByName('token')}::removeItems`, // Removendo items da trade -> Send&Emit
+        Ready:      `${getParameterByName('token')}::ready`, // Pronto ou Cancelando a trade -> Send&Emit
+        Finish:     `${getParameterByName('token')}::finish`, // Finalizando a Trade
         Disconnect: `${getParameterByName('token')}::Disconnect`, // Emit de usuario desconectado
     }
 
@@ -42,7 +51,7 @@ class Trade {
             })
         },
 
-        UserStatus: (type, user) => {
+        Participant: (type, user) => {
 
             StopIntervall(CountParticipante)
             if (type === "Leave") {
@@ -51,8 +60,10 @@ class Trade {
                     if (user.user === 1) {
                         console.log('Participante saiu normalmente')
                         $(".panel-block.items.is-paddingless.xyz").empty();
+                        $(".panel-block.items.is-paddingless.frineditems").empty()
                         $('#cagado').find('span').remove()
                         $('#cagado').find('img').remove()
+                        $('#cagado').css("display", "block")
                         $('#cagado').append('<span class="awaituser" id="AwaitUser"> Aguardando um participante...</span>')
                         $('#cagado').append('<img src="https://d18xl8ggo6ud4h.cloudfront.net/wp-content/uploads/2019/04/loading.fef1f20.gif" class="gifawaituser" id="AwaitUserImg">')
                     }
@@ -154,14 +165,50 @@ class Trade {
                 $('*[data-weaponiden="' + data.id + '"]').appendTo(".panel-block.items.is-paddingless.xyz")
                 $("#CountItemMoneyFriend").text(`${data.count} items - $${data.value}.00`)
             }
-        }
-    }
+        },
 
+        UserStatus(data){
+            if(typeof data.irregularity === 'undefined'){
+                if (data.status) {
+                    if (User !== data.user) {
+                        $('#LockedUser2').css("display", "block")
+                        $('#usernamelock2').text(`${data.user} Pronto!`)
+                        return;
+                    }
+                }else{
+                    $('#LockedUser2').css("display", "none")
+                    return;
+                }
+            }else{
+                if (User !== data.user) {
+                    $('.pronto').text('Pronto')
+                    $('#LockedUser').css("display", "none")
+                    $('.button.mb-2.is-medium.is-success.is-fullwidth').css("background-color", "#48c774")
+                    $("#AlertFinishTrade").append('<div class="finishtradealert"></div><div id="container"><div id="error-box"><div class="erro-boximg"><img src="/components/trade/imgs/gifs/Alert2.gif"></div><div class="messagex"><h1 class="alert">Ops! Teve um ajuste!</h1><p class="textalert">O Participante adicionou ou retirou um item, confirme novamente se você está pronto</p></div><button class="button-box"><h1 class="red">Entendi</h1></button></div> </div>')
+                    $("#AlertFinishTrade").css("display", "block")
+                    var ErrorAlert = new Audio('/components/trade/sound/AlertError.mp3');
+                    ErrorAlert.play();
+                } else {
+                    $('#LockedUser2').css("display", "none")
+                }
+            }
+        },
+
+        More(){
+
+            $("#AlertFinishTrade").on('click', '.button-box', function(e) {
+                    $("#AlertFinishTrade").css("display", "none")
+                    $("#AlertFinishTrade").empty()
+                })
+        }
+
+        }
+    
     Actions = {
 
         AddItem(self, App){
             $('.panel-block.items.owner').on('click', '.item.chifre', function(e) {
-                if (self.Count > 0) { // > 1
+                if (self.Count > 1) {
                     var QI = $("#youroferitemmoney1").text()
                     var item = parseInt(QI) + 1
                     App.emit(self.Routes.AddItems, {
@@ -192,7 +239,35 @@ class Trade {
                 $("#youroferitemmoney1").text(item)
                 $("#youroferitemmoney2").text(valueitems)
             })
+        },
+
+        Ready(self, App){
+            $('.button.mb-2.is-medium.is-success.is-fullwidth').on('click', function(e) {
+                if ($(".panel-block.items.is-paddingless.youoffer").children().length > 0 && self.Count > 1) {
+                    if ($(e.currentTarget).children("span.pronto").text() === "Pronto") {
+                        App.emit(self.Routes.Ready, {
+                            status: true
+                        })
+                        $(e.currentTarget).children("span.pronto").text('Sair')
+                        $('#LockedUser').css("display", "block")
+                        $('.button.mb-2.is-medium.is-success.is-fullwidth').css("background-color", "#bb2c3c")
+                    } else {
+                        App.emit(self.Routes.Ready, {
+                            status: false
+                        })
+                        $(e.currentTarget).children("span.pronto").text("Pronto")
+                        $('#LockedUser').css("display", "none")
+                        $('.button.mb-2.is-medium.is-success.is-fullwidth').css("background-color", "#48c774")
+                    }
+                } else {
+                    $("#AlertFinishTrade").append('<div class="finishtradealert"></div><div id="container"><div id="error-box"><div class="erro-boximg"><img src="/components/trade/imgs/gifs/Alert2.gif"></div><div class="messagex"><h1 class="alert">Epa! Veja só:</h1><p class="textalert">Você só pode ficar Pronto somente após adicionar um item</p></div><button class="button-box"><h1 class="red">Entendi</h1></button></div> </div>')
+                    $("#AlertFinishTrade").css("display", "block")
+                    var ErrorAlert = new Audio('/components/trade/sound/AlertError.mp3');
+                    ErrorAlert.play();
+                }
+            })
         }
+
     }
 
 
@@ -201,14 +276,14 @@ class Trade {
         var App = io(this.Web)
 
         App.on('connect', function(self = Self) {
-            self.Count++
-
+           
             /**
              * Injetando items no cliente, para os dois usuarios
              */
             App.on(self.Routes.GetItems, function(items) {
                 if (items.owner !== User) {
-                    self.Render.UserStatus("Enter", items.owner)
+                    self.Count = 2
+                    self.Render.Participant("Enter", items.owner)
                 }
                 self.Render.ItemsRecived(items.items, items.owner)
             })
@@ -226,20 +301,35 @@ class Trade {
              App.on(self.Routes.RemoveItems, function(dados){
                 self.Render.MirrorItemRemove(dados)
             })
-             
+
+            /**
+             *  Recebendo o Status do Usuario
+             */
+            App.on(self.Routes.Ready, function(dados){
+                self.Render.UserStatus(dados)
+            })
+            
+            /**
+             * Finalizando a trade
+             */
+            App.on(self.Routes.Finish, function(){
+                window.location.href = "/app/trade/finish"
+            })
 
             /**
              * Enviando dados para a sessão, de cada usuario desconectado.
              */
             App.on(self.Routes.Disconnect, function(dados) {
                 self.Count--
-                self.Render.UserStatus("Leave", dados)
+                self.Render.Participant("Leave", dados)
             })
 
         })
         this.Render.SortAndSearch()
+        this.Render.More()
         this.Actions.AddItem(Self, App)
         this.Actions.RemoveItem(Self, App)
+        this.Actions.Ready(Self, App)
     }
 
 }

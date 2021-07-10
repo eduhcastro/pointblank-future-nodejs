@@ -60,7 +60,8 @@ module.exports = async function(io, dbjson, mysql) {
                 dbjson.trade("sessionTrade").get("Sessions").find({
                     sessionkey: Trade[1]
                 }).assign({
-                    participant: User
+                    participant: User,
+                    participantid: UserID
                 }).write() // Inserindo o participante na trade
 
                 /**
@@ -88,8 +89,19 @@ module.exports = async function(io, dbjson, mysql) {
             }
 
         socket.on(`${Trade[1]}::addItems`, (data) => {
+            const SessionCourrent = dbjson.trade("sessionTrade").get("Sessions").find({sessionkey: Trade[1]}).value()
+                if(SessionCourrent.ownerdone === true || SessionCourrent.participantdone === true){
+                dbjson.trade("sessionTrade").get("Sessions").find({sessionkey: Trade[1]}).assign({ownerdone: false,participantdone: false}).write()
+
+                    io.emit(`${Trade[1]}::ready`,{
+                        user: User,
+                        irregularity: true
+                    })
+
+                }
+            
             const ItemsCourrent = dbjson.trade("courrentTrade").get("TradeCourrent")
-            // if(DatabaseJson.participant !== null){
+
 
             /**
              * Adicionando o item do usuario ao Trade courrent
@@ -99,6 +111,7 @@ module.exports = async function(io, dbjson, mysql) {
                 item: parseInt(data.item),
                 count: parseInt(data.count),
                 owner: User,
+                ownerID: User === Dono ? DonoID: UserID,
                 type: data.type,
                 session: Trade[1]
             }).write()
@@ -120,6 +133,18 @@ module.exports = async function(io, dbjson, mysql) {
         })
 
         socket.on(`${Trade[1]}::removeItems`, (data) => {
+            
+            const SessionCourrent = dbjson.trade("sessionTrade").get("Sessions").find({sessionkey: Trade[1]}).value()
+            if(SessionCourrent.ownerdone === true || SessionCourrent.participantdone === true){
+                dbjson.trade("sessionTrade").get("Sessions").find({sessionkey: Trade[1]}).assign({ownerdone: false,participantdone: false}).write()
+
+                io.emit(`${Trade[1]}::ready`,{
+                    user: User,
+                    irregularity: true
+                })
+
+            }
+
             const ItemsCourrent = dbjson.trade("courrentTrade").get("TradeCourrent")
 
             if (typeof ItemsCourrent.find({
@@ -143,6 +168,42 @@ module.exports = async function(io, dbjson, mysql) {
             }
         })
 
+        socket.on(`${Trade[1]}::ready`, async (data) =>{
+            const ItemsCourrent = dbjson.trade("courrentTrade").get("TradeCourrent")
+
+            if(typeof ItemsCourrent.find({session: Trade[1], owner: User}).value() === 'undefined'){
+                console.log("Não é possivel mudar o status do usuario sem ter nenhum item na trade corrente")
+                return socket.disconnect()
+            }
+
+            const SessionCourrent = dbjson.trade("sessionTrade").get("Sessions").find({sessionkey: Trade[1]})
+            if(data.status){
+                User === Dono ? SessionCourrent.assign({ownerdone: true}).write(): SessionCourrent.assign({participantdone: true}).write()
+
+                    if(SessionCourrent.value().ownerdone && SessionCourrent.value().participantdone){
+                        await TradesClass.Items.Changer(mysql, ItemsCourrent, SessionCourrent.value().ownerid, SessionCourrent.value().participantid, Trade[1])
+                       
+                        io.emit(`${Trade[1]}::finish`,{
+                            status: true
+                        })
+                        dbjson.trade("sessionTrade").get("Sessions").remove({sessionkey: Trade[1]}).write()
+                        dbjson.trade("courrentTrade").get("TradeCourrent").remove({session: Trade[1]}).write()
+                        console.log('TENTEI')
+                    }
+                    
+                    io.emit(`${Trade[1]}::ready`,{
+                        user: User,
+                        status: true
+                    })
+            }else{
+                User === Dono ? SessionCourrent.assign({ownerdone: false}).write(): SessionCourrent.assign({participantdone: false}).write()
+                io.emit(`${Trade[1]}::ready`,{
+                    user: User,
+                    status: false
+                })
+            }
+        })
+
         socket.on("disconnect", () => {
 
             if (typeof DatabaseJson !== 'undefined') {
@@ -157,7 +218,7 @@ module.exports = async function(io, dbjson, mysql) {
                         user: 0
                     })
                     console.log(`O Dono da trade Saiu! [${Trade[1]}]`)
-                    //dbjson.trade("sessionTrade").get("Sessions").find({sessionkey: Trade[1]}).remove() // Caso o dono saia da trade, ela deve ser excluida
+                    dbjson.trade("sessionTrade").get("Sessions").find({sessionkey: Trade[1]}).remove() // Caso o dono saia da trade, ela deve ser excluida
                 } else {
                     io.emit(`${Trade[1]}::Disconnect`, {
                         level: 0,
@@ -167,7 +228,8 @@ module.exports = async function(io, dbjson, mysql) {
                     dbjson.trade("sessionTrade").get("Sessions").find({
                         sessionkey: Trade[1]
                     }).assign({
-                        participant: null
+                        participant: null,
+                        participantid: null
                     }).write()
                 }
 

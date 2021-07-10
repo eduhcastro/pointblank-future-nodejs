@@ -10,8 +10,17 @@ const Utils = {
    return result;
   },
 
+  cleanChat: (Json) =>{
+    for(var Messages of Json.value()){
+      if(Json.value().length > 20){
+        var Item = Json.value()[0]
+        dbjson.chat('messagesChat').get('Messages').remove({id: Item.id}).write()
+      }
+    }
+  },
+
   Front: {
-    Categories: ["/images/weapons/category/Rifle.png","/weapons/category/Shot.png","/images/weapons/category/Sniper.png", "/images/weapons/category/Sub.png"],
+    Categories: ["/images/weapons/category/Rifle.png","/images/weapons/category/Shot.png","/images/weapons/category/Sniper.png", "/images/weapons/category/Sub.png"],
 
     Backgrounds: ["linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%)", "linear-gradient(to right, red , yellow)", "linear-gradient(to bottom, #000099 0%, #ff99cc 100%)", "linear-gradient(to bottom, #00cc66 0%, #ff99cc 100%)", "linear-gradient(to bottom, #9900cc 0%, #ff99cc 100%)", "linear-gradient(to bottom, #ffcc00 0%, #ff99cc 100%)", "linear-gradient(to bottom, #ffffff 0%, #ff99cc 100%)", "linear-gradient(to bottom, #ff00ff 0%, #6699ff 100%)", "linear-gradient(to bottom, #99ff66 0%, #6699ff 100%)"],
 

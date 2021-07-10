@@ -118,7 +118,7 @@ $(window).on('load', function() {
         window.open(domain+"/app/trade/exchange/"+e.sessionkey)
         return window.location.replace(domain);
       }
-      window.open(domain+"/app/trade/exchange/"+e.sessionkey)
+      window.open(domain+"/app/trade/exchange/?token="+e.sessionkey)
       return window.location.replace(domain)
   })
 

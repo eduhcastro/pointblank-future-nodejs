@@ -12,7 +12,8 @@ const routeControl = {
     {method: "POST",type: "API", path: "/app/chat/send", protected: true, authblock: false},
     {method: "GET", type: "NORMAL", path: "/app/trade/create", protected: true, authblock: false},
     {method: "POST",type: "API", path: "/app/trade/create", protected: true, authblock: false},
-    {method: "GET", type: "NORMAL",path:"/app/trade/exchange", protected: true, authblock: false}
+    {method: "GET", type: "NORMAL",path:"/app/trade/exchange", protected: true, authblock: false},
+    {method: "GET", type: "NORMAL",path:"/app/trade/finish", protected: true, authblock: false}
   ],
   
   search: function(method, path, callback){ return callback(this.config.find(function(post, index) {
