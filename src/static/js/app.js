@@ -4,7 +4,7 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip({html:true})
 })
 
-$(".btn.btn-warning.me-2").click(function(){
+$(".sc-hTRkXV.sc-hhIiOg.sc-eirqVv.enlJuL.iwisNA.dSzotL").click(function(){
   window.location.replace("/app/authenticate")
 })
 

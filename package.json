@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "chalk": "^2.4.2",
     "cookie-parser": "^1.4.5",
+    "crypto": "^1.0.1",
     "csurf": "^1.11.0",
     "ejs": "^3.1.6",
     "engine.io": "^3.4.2",

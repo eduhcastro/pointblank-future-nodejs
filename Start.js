@@ -81,7 +81,7 @@ app.use(function(err, req, res, next) {
 })
 
 require('./src/App')(app, Postgres, DBJson, Utils)
-require('./src/Socket')(io, DBJson, Postgres)
+require('./src/Socket')(io)
 
 http.listen(8080, async function() {
     console.log('Iniciado')

@@ -1,4 +1,4 @@
-const md5 = require('md5')
+var crypto = require('crypto');
 const Utils = require('../utils')
 module.exports.Apis = class Apis{
    
@@ -26,9 +26,18 @@ module.exports.Apis = class Apis{
           })
         return res.end()
         }
+ 
 
+        // ARRUMAR A ENCRIPTAÇÃO DA SENHA --- NAO COMPATIVEL COM A DO PHP
+        const password = (senha) => {
+          var salt = '/x!a@r-$r%an¨.&e&+f*f(f(a)';
+          var hashMd5 = crypto.createHash('md5').update(salt + senha).digest("hex");
+          var hasSha1 = crypto.createHash('sha1').update(hashMd5).digest("hex");
+          return hasSha1;
+        }
 
-        postgres.query.Callback("SELECT player_id,login,password FROM accounts WHERE login = $1::text AND password = $2::text", [parameters.user,md5(parameters.pass)], function(values){
+        //console.log(password(parameters.pass))
+        postgres.query.Callback("SELECT player_id,login,password FROM accounts WHERE login = $1::text AND password = $2::text", [parameters.user,password(parameters.pass)], function(values){
           if(typeof values.rows === 'undefined' || values.rows.length === 0)
           {
             req.session.error = "username or password is invalid"
@@ -61,60 +70,60 @@ module.exports.Apis = class Apis{
     })
     
     // Chat Routes
-    router.post('/chat/load', function(req,res){
-      const Messages = dbjson.chat('messagesChat').get('Messages').value()
-      res.json(Messages)
-      res.end()
-    })
+    //  router.post('/chat/load', function(req,res){
+    //    const Messages = dbjson.chat('messagesChat').get('Messages').value()
+    //    res.json(Messages)
+    //    res.end()
+    //  })
 
-    router.post('/chat/search', function(req,res){
-      const Messages = dbjson.chat('messagesChat').get('Messages').value()
-        if(Messages.length > 20){
-          Utils.cleanChat(dbjson.chat('messagesChat').get('Messages'))
-        }
-      res.json(Messages)
-      res.end()
-    })
+    //  router.post('/chat/search', function(req,res){
+    //    const Messages = dbjson.chat('messagesChat').get('Messages').value()
+    //      if(Messages.length > 30){
+    //        Utils.cleanChat(dbjson.chat('messagesChat').get('Messages'))
+    //      }
+    //    res.json(Messages)
+    //    res.end()
+    //  })
 
-    router.post('/chat/send', function(req,res){
+    //  router.post('/chat/send', function(req,res){
 
-      if(typeof req.body.message === 'undefined' ||
-        req.body.message.length === 0){
-          res.status(400)
-          res.json({
-            status: false,
-            errorcode: 101
-          })
-        return res.end()
-      }
+    //    if(typeof req.body.message === 'undefined' ||
+    //      req.body.message.length === 0){
+    //        res.status(400)
+    //        res.json({
+    //          status: false,
+    //          errorcode: 101
+    //        })
+    //      return res.end()
+    //    }
 
-      if(req.body.message.length > 100){
-          res.status(400)
-          res.json({
-            status: false,
-            errorcode: 102
-          })
-        return res.end()
-      }
+    //    if(req.body.message.length > 200){
+    //        res.status(400)
+    //        res.json({
+    //          status: false,
+    //          errorcode: 102
+    //        })
+    //      return res.end()
+    //    }
 
-      postgres.query.Callback("SELECT * FROM zevolution_users WHERE userlogin = $1::text", [req.session.autorizacao], function(data){
-        const Count = dbjson.chat('messagesChat').get('Messages').value().length
-        dbjson.chat('messagesChat').get('Messages').push(
-          {
-            id: Count+1,
-            level: parseInt(data.rows[0].level),
-            picture: data.rows[0].picture,
-            name: data.rows[0].userlogin.slice(0, -3)+'***',
-            message: req.body.message.replace(/[\t\n]+/g,' ')
-          }
-        ).write()
-        res.json({
-          status: true,
-          message: "Send"
-        })
-        return res.end()
-      })
-    })
+    //    postgres.query.Callback("SELECT * FROM zevolution_users WHERE userlogin = $1::text", [req.session.autorizacao], //function(data){
+    //      const Count = dbjson.chat('messagesChat').get('Messages').value().length
+    //      dbjson.chat('messagesChat').get('Messages').push(
+    //        {
+    //          id: dbjson.chat('messagesChat').get('Messages').value()[Count - 1].id+1,
+    //          level: parseInt(data.rows[0].level),
+    //          picture: data.rows[0].picture,
+    //          name: data.rows[0].userlogin.slice(0, -3)+'***',
+    //          message: req.body.message.replace(/[\t\n]+/g,' ')
+    //        }
+    //      ).write()
+    //      res.json({
+    //        status: true,
+    //        message: "Send"
+    //      })
+    //      return res.end()
+    //    })
+    //  })
 
     // Trade Routes
     router.post('/trade/create', function(req,res){

@@ -9,6 +9,7 @@ class Trade {
     Web = "http://localhost:8080"
     Count = 0
     Routes = {
+        RoomJoin:   `RoomJoin`,
         GetItems:   `${getParameterByName('token')}::getItems`, // OwnerItems: `${getParameterByName('token')}::owneritems`,
         AddItems :  `${getParameterByName('token')}::addItems`, // Adicionar items ao trade, troca. -> Automatico
         ReciveItems:`${getParameterByName('token')}::reciveItems`, // Recebendo items adicionado na trade -> Send&Emit
@@ -276,11 +277,27 @@ class Trade {
         var App = io(this.Web)
 
         App.on('connect', function(self = Self) {
+
+            /**
+             * Escolhendo minha sala
+             */
+            App.emit(self.Routes.RoomJoin, {
+                room: self.Room
+            })
+
+            App.on(self.Routes.RoomJoin, (data) => {
+                if (!data.status) {
+                    console.log('O Servidor recusou sua entrada no tunel.')
+                    return App.disconnect()
+                }
+                console.log('Em tunel com o Chat')
+            })
            
             /**
              * Injetando items no cliente, para os dois usuarios
              */
             App.on(self.Routes.GetItems, function(items) {
+                console.log({User: User, Items: items})
                 if (items.owner !== User) {
                     self.Count = 2
                     self.Render.Participant("Enter", items.owner)

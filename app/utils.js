@@ -12,9 +12,9 @@ const Utils = {
 
   cleanChat: (Json) =>{
     for(var Messages of Json.value()){
-      if(Json.value().length > 20){
+      if(Json.value().length > 30){
         var Item = Json.value()[0]
-        dbjson.chat('messagesChat').get('Messages').remove({id: Item.id}).write()
+       Json.remove({id: Item.id}).write()
       }
     }
   },

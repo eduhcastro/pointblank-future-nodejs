@@ -6,18 +6,21 @@ const DBJson = {
     trade: (select) => {
     const file = new FileSync(`./app/data/trade/${select}.json`)
     const db = low(file);
+    db.read()
     return db;
     },
 
     bets: (select) => {
     const file = new FileSync(`./app/data/bets/${select}.json`)
     const db = low(file);
+    db.read()
     return db;
     },
 
     chat: (select) => {
         const file = new FileSync(`./app/data/chat/${select}.json`)
         const db = low(file);
+        db.read()
         return db;
     },
 
